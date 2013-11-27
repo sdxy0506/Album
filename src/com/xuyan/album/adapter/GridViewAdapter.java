@@ -105,7 +105,7 @@ public class GridViewAdapter extends BaseAdapter implements OnClickListener {
 			holder = (ViewHolder) view.getTag();
 		}
 		Log.d(TAG, String.format(" poistion = %d", position));
-		Constants.imageLoader.displayImage("file://" + getItem(position),
+		Constants.imageLoader.displayImage("file://" + mPhotos.get(position),
 				holder.mPic, Constants.image_display_options,
 				animateFirstListener);
 

@@ -1,4 +1,4 @@
-package com.xuyan.album;
+package com.xuyan.album.application;
 
 import java.util.ArrayList;
 
@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.xuyan.album.Album;
 import com.xuyan.album.Constants.Config;
 
 /**
@@ -22,6 +23,8 @@ public class UILApplication extends Application {
 
 	// 利用全局变量储存相册列表信息
 	public ArrayList<Album> albums;
+	// 已选择相片的路径集合
+	public ArrayList<String> selectedPhotos;
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	@SuppressWarnings("unused")
@@ -48,12 +51,12 @@ public class UILApplication extends Application {
 		// ImageLoaderConfiguration.createDefault(this);
 		// method.
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-				context).threadPriority(Thread.NORM_PRIORITY - 1)
+				context).threadPriority(Thread.NORM_PRIORITY - 2)
 				.denyCacheImageMultipleSizesInMemory()
 				.discCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-				.memoryCacheSize(2 * 1024 * 1024)
+				.memoryCache(new LruMemoryCache(10 * 1024 * 1024))
+				.memoryCacheSize(10 * 1024 * 1024)
 				.discCacheSize(50 * 1024 * 1024).discCacheFileCount(100)
 				.writeDebugLogs() // Remove for release app
 				.build();
@@ -77,5 +80,13 @@ public class UILApplication extends Application {
 	 */
 	public void setAlbums(ArrayList<Album> albums) {
 		this.albums = albums;
+	}
+
+	public ArrayList<String> getSelectedPhotos() {
+		return selectedPhotos;
+	}
+
+	public void setSelectedPhotos(ArrayList<String> selectedPhotos) {
+		this.selectedPhotos = selectedPhotos;
 	}
 }

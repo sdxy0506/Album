@@ -83,7 +83,7 @@
             android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:columnWidth="@dimen/itemSize"
+            android:columnWidth="@dimen/smallSize"
             android:horizontalSpacing="2dp"
             android:listSelector="@null"
             android:numColumns="auto_fit"

@@ -26,10 +26,12 @@ import android.widget.ToggleButton;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.xuyan.album.adapter.AlbumListViewAdapter;
 import com.xuyan.album.adapter.GridViewAdapter;
+import com.xuyan.album.application.SetApplication;
+import com.xuyan.album.application.UILApplication;
 
 import de.greenrobot.event.EventBus;
 
-public class MyAlbumActivity extends Activity {
+public class MyAlbumActivity extends Activity implements SetApplication {
 	private Context mContext;
 	private ListView listView;
 	private AlbumListViewAdapter listViewAdapter;
@@ -90,15 +92,15 @@ public class MyAlbumActivity extends Activity {
 	}
 
 	private void setListeners() {
-		btn_album.setOnClickListener(btnClickListener);
-		btn_cancel.setOnClickListener(btnClickListener);
-		okButton.setOnClickListener(btnClickListener);
+		btn_album.setOnClickListener(btnListener);
+		btn_cancel.setOnClickListener(btnListener);
+		okButton.setOnClickListener(btnListener);
 		// 避免list，grid滑动滞后
 		listView.setOnScrollListener(pauseListener);
 		gridView.setOnScrollListener(pauseListener);
 	}
 
-	private OnClickListener btnClickListener = new OnClickListener() {
+	private OnClickListener btnListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
@@ -114,6 +116,7 @@ public class MyAlbumActivity extends Activity {
 				break;
 			case R.id.ok_button:
 				setResult(RESULT_OK);
+				setApplication().setSelectedPhotos(mSelectedPhotos);
 				finish();
 				break;
 			default:
@@ -146,7 +149,8 @@ public class MyAlbumActivity extends Activity {
 			hashMap.remove(path);
 			removeOneData(mSelectedPhotos, path);
 			if (mSelectedPhotos.size() > 0) {
-				okButton.setText("完成(" + mSelectedPhotos.size() + "/8)");
+				okButton.setText("完成(" + mSelectedPhotos.size() + "/"
+						+ Constants.MAX_PHOTOS + ")");
 			} else {
 				okButton.setText("完成");
 			}
@@ -185,11 +189,13 @@ public class MyAlbumActivity extends Activity {
 						public void onItemClick(
 								final ToggleButton toggleButton, int position,
 								final String path, boolean isChecked) {
-							if (mSelectedPhotos.size() >= 8) {
+							if (mSelectedPhotos.size() >= Constants.MAX_PHOTOS) {
 								toggleButton.setChecked(false);
 								if (!removePath(path)) {
-									Toast.makeText(MyAlbumActivity.this,
-											"只能选择8张图片", Toast.LENGTH_SHORT)
+									Toast.makeText(
+											MyAlbumActivity.this,
+											"只能选择" + Constants.MAX_PHOTOS
+													+ "张图片", Toast.LENGTH_SHORT)
 											.show();
 								}
 								return;
@@ -236,7 +242,8 @@ public class MyAlbumActivity extends Activity {
 												}
 											});
 									okButton.setText("完成("
-											+ mSelectedPhotos.size() + "/8)");
+											+ mSelectedPhotos.size() + "/"
+											+ Constants.MAX_PHOTOS + ")");
 									for (int i = 0; i < mSelectedPhotos.size(); i++) {
 										Log.i("photo", mSelectedPhotos.get(i));
 
@@ -249,10 +256,6 @@ public class MyAlbumActivity extends Activity {
 						}
 					});
 		}
-	}
-
-	private UILApplication setApplication() {
-		return ((UILApplication) super.getApplicationContext());
 	}
 
 	private class showAlbumsList extends AsyncTask<Object, Object, Object> {
@@ -279,6 +282,11 @@ public class MyAlbumActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		setApplication().setAlbums(albums);
+	}
+
+	@Override
+	public UILApplication setApplication() {
+		return ((UILApplication) super.getApplicationContext());
 	}
 
 }

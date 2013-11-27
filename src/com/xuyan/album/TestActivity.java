@@ -2,9 +2,15 @@ package com.xuyan.album;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import com.xuyan.album.adapter.SendGridViewAdapter;
+import com.xuyan.album.application.SetApplication;
+import com.xuyan.album.application.UILApplication;
+
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,7 +23,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TestActivity extends Activity {
+public class TestActivity extends Activity implements SetApplication {
 
 	private Context mContext;
 
@@ -31,6 +37,10 @@ public class TestActivity extends Activity {
 	private File mImageFile;
 	private Uri mImageUri;
 
+	private SendGridViewAdapter gridViewAdapter;
+
+	private ArrayList<String> mSelectedPhotos = new ArrayList<String>();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +48,7 @@ public class TestActivity extends Activity {
 		mContext = this;
 		findViews();
 		setListener();
+
 	}
 
 	private void findViews() {
@@ -68,6 +79,9 @@ public class TestActivity extends Activity {
 				break;
 			case R.id.send_camera:
 				openImageCamera();
+				break;
+			case R.id.send_send:
+				setApplication().getSelectedPhotos().clear();
 				break;
 			default:
 				break;
@@ -100,11 +114,19 @@ public class TestActivity extends Activity {
 		if (requestCode == Constants.REQUEST_IMAGE_FILE
 				&& resultCode == RESULT_OK) {
 			Toast.makeText(mContext, "从相册返回", Toast.LENGTH_SHORT).show();
+			mSelectedPhotos = setApplication().getSelectedPhotos();
+			gridViewAdapter = new SendGridViewAdapter(mContext, mSelectedPhotos);
+			send_gridView.setAdapter(gridViewAdapter);
 
 		} else if (requestCode == Constants.REQUEST_IMAGE_FILE
 				&& resultCode == RESULT_OK) {
 			mImageUri = data.getData();
 		}
+	}
+
+	@Override
+	public UILApplication setApplication() {
+		return ((UILApplication) super.getApplicationContext());
 	}
 
 }

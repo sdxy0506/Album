@@ -27,6 +27,7 @@ import android.widget.ToggleButton;
 
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.xuyan.album.adapter.GridViewAdapter;
+import com.xuyan.album.application.UILApplication;
 
 public class AlbumActivity extends Activity {
 	private Context mContext;

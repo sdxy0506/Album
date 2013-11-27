@@ -35,6 +35,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 public final class Constants {
 	public static final int REQUEST_IMAGE_FILE = 1;
 	public static final int REQUEST_IMAGE_CAMERA = 0;
+	public static final int MAX_PHOTOS = 4;
 	public static ImageLoader imageLoader = ImageLoader.getInstance();
 	// RoundedBitmapDisplayer 设置圆角的大小
 	public static DisplayImageOptions image_display_options = new DisplayImageOptions.Builder()
