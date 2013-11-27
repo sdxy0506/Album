@@ -8,8 +8,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -59,48 +61,68 @@ public class MyAlbumActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.album_main);
-
 		mContext = this;
+
 		eventBus = EventBus.getDefault();
 		eventBus.register(this);
 
-		listView = (ListView) this.findViewById(R.id.list_view);
-		gridView = (GridView) this.findViewById(R.id.grid_view);
-
-		// 避免list，grid滑动滞后
-		listView.setOnScrollListener(pauseListener);
-		gridView.setOnScrollListener(pauseListener);
-
-		listViewAdapter = new AlbumListViewAdapter(mContext);
-
-		selectedImageLayout = (LinearLayout) findViewById(R.id.selected_image_layout);
-		scroll_view = (HorizontalScrollView) findViewById(R.id.scrollview);
-		btn_album = (Button) this.findViewById(R.id.photo);
-		btn_cancel = (Button) this.findViewById(R.id.cancel);
-		title = (TextView) this.findViewById(R.id.title);
-		okButton = (Button) this.findViewById(R.id.ok_button);
-		btn_album.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				listView.setVisibility(View.VISIBLE);
-				gridView.setVisibility(View.INVISIBLE);
-				btn_album.setVisibility(View.INVISIBLE);
-				title.setText("相册");
-			}
-		});
+		findViews();
+		setListeners();
 
 		progressDialog = new ProgressDialog(mContext);
 		progressDialog.setMessage("正在读取相册列表");
+		progressDialog.setCancelable(false);
 		progressDialog.show();
 		new showAlbumsList().execute();
 	}
 
+	private void findViews() {
+		listView = (ListView) this.findViewById(R.id.list_view);
+		gridView = (GridView) this.findViewById(R.id.grid_view);
+		selectedImageLayout = (LinearLayout) findViewById(R.id.selected_image_layout);
+		scroll_view = (HorizontalScrollView) findViewById(R.id.scrollview);
+		title = (TextView) this.findViewById(R.id.title);
+		btn_album = (Button) this.findViewById(R.id.photo);
+		btn_cancel = (Button) this.findViewById(R.id.cancel);
+		okButton = (Button) this.findViewById(R.id.ok_button);
+	}
+
+	private void setListeners() {
+		btn_album.setOnClickListener(btnClickListener);
+		btn_cancel.setOnClickListener(btnClickListener);
+		okButton.setOnClickListener(btnClickListener);
+		// 避免list，grid滑动滞后
+		listView.setOnScrollListener(pauseListener);
+		gridView.setOnScrollListener(pauseListener);
+	}
+
+	private OnClickListener btnClickListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.photo:
+				listView.setVisibility(View.VISIBLE);
+				gridView.setVisibility(View.INVISIBLE);
+				btn_album.setVisibility(View.INVISIBLE);
+				title.setText("相册");
+				break;
+			case R.id.cancel:
+				Toast.makeText(mContext, "暂未开放!", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.ok_button:
+				Toast.makeText(mContext, "等待开放！", Toast.LENGTH_SHORT).show();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
 	private void setAlbumsList() {
-
+		listViewAdapter = new AlbumListViewAdapter(mContext);
 		listViewAdapter.setAlbumsList(albums);
-
 		listView.setAdapter(listViewAdapter);
-
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view,
@@ -125,7 +147,6 @@ public class MyAlbumActivity extends Activity {
 			} else {
 				okButton.setText("完成");
 			}
-
 			return true;
 		} else {
 			return false;
@@ -152,8 +173,8 @@ public class MyAlbumActivity extends Activity {
 			String album_dir = albums.get(bundle.getInt("position")).mName;
 			title.setText(album_dir);
 			mPhotos = Constants.getPhotos(mContext, album_dir);
-			gridViewAdapter = new GridViewAdapter(getApplicationContext(),
-					mPhotos, mSelectedPhotos);
+			gridViewAdapter = new GridViewAdapter(mContext, mPhotos,
+					mSelectedPhotos);
 			gridView.setAdapter(gridViewAdapter);
 			gridViewAdapter
 					.setOnItemClickListener(new GridViewAdapter.OnItemClickListener() {
@@ -164,8 +185,9 @@ public class MyAlbumActivity extends Activity {
 							if (mSelectedPhotos.size() >= 8) {
 								toggleButton.setChecked(false);
 								if (!removePath(path)) {
-									Toast.makeText(MyAlbumActivity.this, "只能选择8张图片",
-											Toast.LENGTH_SHORT).show();
+									Toast.makeText(MyAlbumActivity.this,
+											"只能选择8张图片", Toast.LENGTH_SHORT)
+											.show();
 								}
 								return;
 							}
@@ -173,8 +195,8 @@ public class MyAlbumActivity extends Activity {
 							if (isChecked) {
 								if (!hashMap.containsKey(path)) {
 									ImageView imageView = (ImageView) LayoutInflater
-											.from(MyAlbumActivity.this).inflate(
-													R.layout.choose_imageview,
+											.from(MyAlbumActivity.this)
+											.inflate(R.layout.choose_imageview,
 													selectedImageLayout, false);
 									selectedImageLayout.addView(imageView);
 									imageView.postDelayed(new Runnable() {
@@ -212,6 +234,10 @@ public class MyAlbumActivity extends Activity {
 											});
 									okButton.setText("完成("
 											+ mSelectedPhotos.size() + "/8)");
+									for (int i = 0; i < mSelectedPhotos.size(); i++) {
+										Log.i("photo", mSelectedPhotos.get(i));
+
+									}
 
 								}
 							} else {
