@@ -1,4 +1,4 @@
-package com.xuyan.album;
+package com.xuyan.album.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.xuyan.album.Album;
+import com.xuyan.album.Constants;
+import com.xuyan.album.R;
+import com.xuyan.album.Util;
+import com.xuyan.album.R.id;
+import com.xuyan.album.R.layout;
+import com.xuyan.album.Util.AnimateFirstDisplayListener;
 
 import java.util.ArrayList;
 import java.util.List;

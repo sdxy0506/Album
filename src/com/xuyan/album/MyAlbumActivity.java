@@ -24,6 +24,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
+import com.xuyan.album.adapter.AlbumListViewAdapter;
+import com.xuyan.album.adapter.GridViewAdapter;
 
 import de.greenrobot.event.EventBus;
 
@@ -108,10 +110,11 @@ public class MyAlbumActivity extends Activity {
 				title.setText("相册");
 				break;
 			case R.id.cancel:
-				Toast.makeText(mContext, "暂未开放!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "暂未开放！", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.ok_button:
-				Toast.makeText(mContext, "等待开放！", Toast.LENGTH_SHORT).show();
+				setResult(RESULT_OK);
+				finish();
 				break;
 			default:
 				break;
@@ -271,4 +274,11 @@ public class MyAlbumActivity extends Activity {
 		}
 
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		setApplication().setAlbums(albums);
+	}
+
 }

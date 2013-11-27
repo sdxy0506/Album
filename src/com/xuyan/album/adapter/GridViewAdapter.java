@@ -1,4 +1,4 @@
-package com.xuyan.album;
+package com.xuyan.album.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,6 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.xuyan.album.Constants;
+import com.xuyan.album.R;
+import com.xuyan.album.Util;
+import com.xuyan.album.R.id;
+import com.xuyan.album.R.layout;
+import com.xuyan.album.Util.AnimateFirstDisplayListener;
 
 import java.util.ArrayList;
 
@@ -49,7 +55,7 @@ public class GridViewAdapter extends BaseAdapter implements OnClickListener {
 	 */
 	public GridViewAdapter(Context ctx, ArrayList<String> mPhotos,
 			ArrayList<String> mSelectedPhotos) {
-		this.context = ctx;
+		this.setContext(ctx);
 		this.mInflater = (LayoutInflater) ctx
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mPhotos = mPhotos;
@@ -141,6 +147,14 @@ public class GridViewAdapter extends BaseAdapter implements OnClickListener {
 
 	public void setOnItemClickListener(OnItemClickListener l) {
 		mOnItemClickListener = l;
+	}
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 	public interface OnItemClickListener {

@@ -2,6 +2,8 @@ package com.xuyan.album;
 
 import java.util.ArrayList;
 
+import com.xuyan.album.adapter.AlbumListViewAdapter;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

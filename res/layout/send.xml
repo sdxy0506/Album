@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/send_title"
+        android:layout_width="wrap_content"
+        android:layout_height="30dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="发布说说"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/send_say"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/send_title"
+        android:layout_marginTop="5dip"
+        android:hint="内容..." />
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" >
+
+        <Button
+            android:id="@+id/send_camera"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="拍照" />
+
+        <Button
+            android:id="@+id/send_album"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="相册" />
+
+        <Button
+            android:id="@+id/send_more"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="更多" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/send_send"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="30dip"
+        android:layout_alignBottom="@id/send_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="发送" />
+
+    <Button
+        android:id="@+id/send_cancel"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="30dip"
+        android:layout_alignBottom="@id/send_title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="取消" />
+
+    <RelativeLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom"
+        android:layout_below="@id/send_say" >
+
+        <GridView
+            android:id="@+id/send_grid"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:columnWidth="@dimen/itemSize"
+            android:horizontalSpacing="2dp"
+            android:listSelector="@null"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="2dp" >
+        </GridView>
+    </RelativeLayout>
+
+</RelativeLayout>
