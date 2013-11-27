@@ -25,6 +25,10 @@
         <activity
             android:name="com.xuyan.album.AlbumsListActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.xuyan.album.MyAlbumActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

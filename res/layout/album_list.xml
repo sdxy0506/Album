@@ -20,11 +20,11 @@
         </TextView>
 
         <Button
-            android:id="@+id/choise_album"
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="返回" >
+            android:text="取消" >
         </Button>
     </RelativeLayout>
 

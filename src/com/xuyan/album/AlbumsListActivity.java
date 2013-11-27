@@ -4,16 +4,14 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class AlbumsListActivity extends Activity {
@@ -23,11 +21,24 @@ public class AlbumsListActivity extends Activity {
 	private Context mContext;
 	private ProgressDialog progressDialog;
 
+	private Button cancel;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.album_list);
 		mContext = this;
+		cancel = (Button) findViewById(R.id.cancel);
+		cancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent();
+				intent.setClass(mContext, MyAlbumActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
 		listView = (ListView) this.findViewById(R.id.list_view);
 		listViewAdapter = new AlbumListViewAdapter(mContext);
 		progressDialog = new ProgressDialog(mContext);
@@ -78,6 +89,7 @@ public class AlbumsListActivity extends Activity {
 		protected void onPostExecute(Object result) {
 			super.onPostExecute(result);
 			setAlbumsList();
+			setApplication().setAlbums(albums);
 			progressDialog.dismiss();
 		}
 
@@ -86,6 +98,7 @@ public class AlbumsListActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		
 	}
 
 }
