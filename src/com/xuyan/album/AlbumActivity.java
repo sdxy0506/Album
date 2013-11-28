@@ -206,10 +206,7 @@ public class AlbumActivity extends Activity {
 
 		@Override
 		protected Object doInBackground(Object... params) {
-			albums = setApplication().getAlbums();
-			if (albums == null) {
-				albums = Util.getAlbums(mContext);
-			}
+			albums = Util.getAlbums(mContext);
 			String album_dir = albums.get(AlbumId).mName;
 			title.setText(album_dir);
 			mPhotos.addAll(Util.getPhotos(mContext, album_dir));

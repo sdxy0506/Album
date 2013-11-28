@@ -67,7 +67,6 @@ public class AlbumsListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view,
 					int i, long l) {
-				setApplication().setAlbums(albums);
 				Intent intent = new Intent();
 				Bundle bundle = new Bundle();
 				bundle.putInt("AlbumId", i);
@@ -88,10 +87,7 @@ public class AlbumsListActivity extends Activity {
 
 		@Override
 		protected Object doInBackground(Object... params) {
-			albums = setApplication().getAlbums();
-			if (albums.size() == 0) {
-				albums = Util.getAlbums(mContext);
-			}
+			albums = Util.getAlbums(mContext);
 			return null;
 		}
 
@@ -99,7 +95,6 @@ public class AlbumsListActivity extends Activity {
 		protected void onPostExecute(Object result) {
 			super.onPostExecute(result);
 			setAlbumsList();
-			setApplication().setAlbums(albums);
 			progressDialog.dismiss();
 		}
 

@@ -2,10 +2,6 @@ package com.xuyan.util;
 
 import java.util.ArrayList;
 
-import com.xuyan.album.R;
-
-import net.tsz.afinal.FinalBitmap;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -20,6 +16,8 @@ public class Util {
 	public static final int REQUEST_IMAGE_FILE = 1;
 	public static final int REQUEST_IMAGE_CAMERA = 0;
 	public static final int MAX_PHOTOS = 9;// 能选择的图片的最大数量
+	public static final String SELECT_PIC = "selected";
+	public static ArrayList<Album> ALBUMS = new ArrayList<Album>();
 
 	/**
 	 * 获取图片所在文件夹名称
@@ -48,12 +46,8 @@ public class Util {
 		int fileNum = cursor.getCount();
 
 		for (int counter = 0; counter < fileNum; counter++) {
-			Log.w("tag",
-					"---file is:"
-							+ cursor.getString(cursor
-									.getColumnIndex(MediaStore.Video.Media.DATA)));
 			String path = cursor.getString(cursor
-					.getColumnIndex(MediaStore.Video.Media.DATA));
+					.getColumnIndex(MediaStore.Images.Media.DATA));
 			// 获取路径中文件的目录
 			String file_dir = getDir(path);
 

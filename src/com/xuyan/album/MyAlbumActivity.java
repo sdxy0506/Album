@@ -7,6 +7,7 @@ import net.tsz.afinal.FinalBitmap;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import android.widget.ToggleButton;
 
 import com.xuyan.album.adapter.AlbumListViewAdapter;
 import com.xuyan.album.adapter.GridViewAdapter;
-import com.xuyan.album.application.SetApplication;
+import com.xuyan.album.application.GetApplication;
 import com.xuyan.album.application.UILApplication;
 import com.xuyan.util.Album;
 import com.xuyan.util.TestEvent;
@@ -33,7 +34,7 @@ import com.xuyan.util.Util;
 
 import de.greenrobot.event.EventBus;
 
-public class MyAlbumActivity extends Activity implements SetApplication {
+public class MyAlbumActivity extends Activity implements GetApplication {
 	private Context mContext;
 	private ListView listView;
 	private AlbumListViewAdapter listViewAdapter;
@@ -57,6 +58,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 	private ProgressDialog progressDialog;
 
 	private FinalBitmap fb;
+	private Intent intent;
 
 	/**
 	 * Called when the activity is first created.
@@ -67,6 +69,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 		setContentView(R.layout.album_main);
 		mContext = this;
 
+		intent = getIntent();
 		eventBus = EventBus.getDefault();
 		eventBus.register(this);
 
@@ -75,7 +78,6 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 
 		findViews();
 		setListeners();
-
 		progressDialog = new ProgressDialog(mContext);
 		progressDialog.setMessage("正在读取相册列表");
 		progressDialog.setCancelable(false);
@@ -112,11 +114,13 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 				title.setText("相册");
 				break;
 			case R.id.cancel:
-				Toast.makeText(mContext, "暂未开放！", Toast.LENGTH_SHORT).show();
+				setResult(RESULT_CANCELED);
+				finish();
 				break;
 			case R.id.ok_button:
-				setResult(RESULT_OK);
-				setApplication().setSelectedPhotos(mSelectedPhotos);
+
+				intent.putStringArrayListExtra(Util.SELECT_PIC, mSelectedPhotos);
+				setResult(RESULT_OK, intent);
 				finish();
 				break;
 			default:
@@ -248,9 +252,42 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 
 		@Override
 		protected Object doInBackground(Object... params) {
-			albums = setApplication().getAlbums();
-			if (albums.size() == 0) {
-				albums = Util.getAlbums(mContext);
+			albums = Util.ALBUMS;
+
+			mSelectedPhotos.addAll(intent
+					.getStringArrayListExtra(Util.SELECT_PIC));
+			int count = mSelectedPhotos.size();
+			for (int i = 0; i < count; i++) {
+				final String mPath = mSelectedPhotos.get(i);
+				ImageView imageView = (ImageView) LayoutInflater.from(
+						MyAlbumActivity.this).inflate(
+						R.layout.choose_imageview, selectedImageLayout, false);
+				selectedImageLayout.addView(imageView);
+				imageView.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						int off = selectedImageLayout.getMeasuredWidth()
+								- scroll_view.getWidth();
+						if (off > 0) {
+							scroll_view.smoothScrollTo(off, 0);
+						}
+					}
+				}, 100);
+
+				hashMap.put(mPath, imageView);
+				fb.display(imageView, mPath);
+				imageView.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						if (gridViewAdapter != null) {
+							gridViewAdapter.notifyDataSetChanged();
+						}
+						removePath(mPath);
+					}
+				});
+				okButton.setText("完成(" + mSelectedPhotos.size() + "/"
+						+ Util.MAX_PHOTOS + ")");
 			}
 			return null;
 		}
@@ -267,12 +304,16 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		setApplication().setAlbums(albums);
 	}
 
 	@Override
-	public UILApplication setApplication() {
+	public UILApplication getMyApplication() {
 		return ((UILApplication) super.getApplicationContext());
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
 	}
 
 }
