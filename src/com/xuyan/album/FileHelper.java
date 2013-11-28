@@ -5,10 +5,6 @@ import java.io.IOException;
 
 import android.os.Environment;
 
-/**
- * 
- * 
- */
 public class FileHelper {
 	private static final String BASE_PATH = "SRX";
 	private static final String VOICE_PATH = "voiceFile";

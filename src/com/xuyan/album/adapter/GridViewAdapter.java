@@ -1,5 +1,8 @@
 package com.xuyan.album.adapter;
 
+import java.util.ArrayList;
+
+import net.tsz.afinal.FinalBitmap;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,27 +12,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.xuyan.album.Constants;
-import com.xuyan.album.R;
-import com.xuyan.album.Util;
-import com.xuyan.album.R.id;
-import com.xuyan.album.R.layout;
-import com.xuyan.album.Util.AnimateFirstDisplayListener;
 
-import java.util.ArrayList;
+import com.xuyan.album.R;
 
 /**
  * Created with IntelliJ IDEA. User: hetuo Date: 13-10-28 Time: 上午10:12 To
  * change this template use File | Settings | File Templates.
  */
 public class GridViewAdapter extends BaseAdapter implements OnClickListener {
-	private ImageLoadingListener animateFirstListener = new Util.AnimateFirstDisplayListener();
 
 	private LayoutInflater mInflater;
 	private Context context;
 	private ArrayList<String> mPhotos;
 	private ArrayList<String> mSelectedPhotos;
+	private FinalBitmap fb;
 
 	private String TAG = GridViewAdapter.class.getSimpleName();
 
@@ -54,12 +50,13 @@ public class GridViewAdapter extends BaseAdapter implements OnClickListener {
 	 * 
 	 */
 	public GridViewAdapter(Context ctx, ArrayList<String> mPhotos,
-			ArrayList<String> mSelectedPhotos) {
+			ArrayList<String> mSelectedPhotos, FinalBitmap finalBitmap) {
 		this.setContext(ctx);
 		this.mInflater = (LayoutInflater) ctx
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mPhotos = mPhotos;
 		this.mSelectedPhotos = mSelectedPhotos;
+		this.fb = finalBitmap;
 	}
 
 	/**
@@ -105,9 +102,7 @@ public class GridViewAdapter extends BaseAdapter implements OnClickListener {
 			holder = (ViewHolder) view.getTag();
 		}
 		Log.d(TAG, String.format(" poistion = %d", position));
-		Constants.imageLoader.displayImage("file://" + mPhotos.get(position),
-				holder.mPic, Constants.image_display_options,
-				animateFirstListener);
+		fb.display(holder.mPic, mPhotos.get(position));
 
 		holder.mToggleButton.setTag(position);
 		holder.mToggleButton.setOnClickListener(this);

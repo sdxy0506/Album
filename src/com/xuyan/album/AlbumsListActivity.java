@@ -2,9 +2,7 @@ package com.xuyan.album;
 
 import java.util.ArrayList;
 
-import com.xuyan.album.adapter.AlbumListViewAdapter;
-import com.xuyan.album.application.UILApplication;
-
+import net.tsz.afinal.FinalBitmap;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,6 +15,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.xuyan.album.adapter.AlbumListViewAdapter;
+import com.xuyan.album.application.UILApplication;
+
 public class AlbumsListActivity extends Activity {
 	private ListView listView;
 	private AlbumListViewAdapter listViewAdapter;
@@ -26,11 +27,15 @@ public class AlbumsListActivity extends Activity {
 
 	private Button cancel;
 
+	private FinalBitmap fb;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.album_list);
 		mContext = this;
+		fb = FinalBitmap.create(mContext);
+		fb.configLoadfailImage(R.drawable.ic_stub);
 		cancel = (Button) findViewById(R.id.cancel);
 		cancel.setOnClickListener(new OnClickListener() {
 
@@ -43,7 +48,7 @@ public class AlbumsListActivity extends Activity {
 			}
 		});
 		listView = (ListView) this.findViewById(R.id.list_view);
-		listViewAdapter = new AlbumListViewAdapter(mContext);
+		listViewAdapter = new AlbumListViewAdapter(mContext, fb);
 		progressDialog = new ProgressDialog(mContext);
 		progressDialog.setMessage("正在读取相册列表");
 		progressDialog.show();
@@ -101,7 +106,7 @@ public class AlbumsListActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+
 	}
 
 }

@@ -3,6 +3,7 @@ package com.xuyan.album;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.tsz.afinal.FinalBitmap;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -25,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.xuyan.album.adapter.GridViewAdapter;
 import com.xuyan.album.application.UILApplication;
 
@@ -50,9 +50,7 @@ public class AlbumActivity extends Activity {
 
 	private Button album_btn;
 
-	// 避免list，grid滑动滞后
-	PauseOnScrollListener pauseListener = new PauseOnScrollListener(
-			Constants.imageLoader, false, true);
+	private FinalBitmap fb;
 
 	/**
 	 * Called when the activity is first created.
@@ -65,15 +63,13 @@ public class AlbumActivity extends Activity {
 		mContext = this;
 		bundle = getIntent().getExtras();
 		AlbumId = bundle.getInt("AlbumId");
-		Log.i("Id", "" + AlbumId);
 
 		album_btn = (Button) findViewById(R.id.choise_album);
 		album_btn.setOnClickListener(btnListener);
 
 		gridView = (GridView) this.findViewById(R.id.grid_view);
-
-		// 避免list，grid滑动滞后
-		gridView.setOnScrollListener(pauseListener);
+		fb = FinalBitmap.create(mContext);
+		fb.configLoadfailImage(R.drawable.ic_stub);
 
 		selectedImageLayout = (LinearLayout) findViewById(R.id.selected_image_layout);
 		scroll_view = (HorizontalScrollView) findViewById(R.id.scrollview);
@@ -143,7 +139,7 @@ public class AlbumActivity extends Activity {
 
 	private void setGridView() {
 		gridViewAdapter = new GridViewAdapter(getApplicationContext(), mPhotos,
-				mSelectedPhotos);
+				mSelectedPhotos, fb);
 		gridView.setAdapter(gridViewAdapter);
 		gridViewAdapter
 				.setOnItemClickListener(new GridViewAdapter.OnItemClickListener() {
@@ -182,10 +178,7 @@ public class AlbumActivity extends Activity {
 
 								hashMap.put(path, imageView);
 								mSelectedPhotos.add(path);
-								Constants.imageLoader.displayImage("file://"
-										+ mPhotos.get(position), imageView,
-										Constants.image_display_options,
-										new Util.AnimateFirstDisplayListener());
+								fb.display(imageView, mPhotos.get(position));
 								imageView
 										.setOnClickListener(new View.OnClickListener() {
 

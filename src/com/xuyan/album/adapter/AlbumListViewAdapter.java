@@ -1,5 +1,9 @@
 package com.xuyan.album.adapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.tsz.afinal.FinalBitmap;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,17 +12,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.xuyan.album.Album;
-import com.xuyan.album.Constants;
-import com.xuyan.album.R;
-import com.xuyan.album.Util;
-import com.xuyan.album.R.id;
-import com.xuyan.album.R.layout;
-import com.xuyan.album.Util.AnimateFirstDisplayListener;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.xuyan.album.Album;
+import com.xuyan.album.R;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,12 +28,14 @@ import java.util.List;
  * 相册列表适配器
  */
 public class AlbumListViewAdapter extends BaseAdapter {
-	protected ImageLoader imageLoader = ImageLoader.getInstance();
+	// protected ImageLoader imageLoader = ImageLoader.getInstance();
 	private LayoutInflater mInflater;
 	private List<Album> mAlbums;
 	private Context context;
 
 	private String TAG = AlbumListViewAdapter.class.getSimpleName();
+
+	private FinalBitmap fb;
 
 	/**
 	 * 列表项目View持有者
@@ -55,11 +53,12 @@ public class AlbumListViewAdapter extends BaseAdapter {
 	 * @param ctx
 	 *            Context 上下文
 	 */
-	public AlbumListViewAdapter(Context ctx) {
+	public AlbumListViewAdapter(Context ctx, FinalBitmap fBitmap) {
 		this.context = ctx;
 		mAlbums = new ArrayList<Album>(0);
 		mInflater = (LayoutInflater) ctx
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		fb = fBitmap;
 	}
 
 	/**
@@ -124,9 +123,7 @@ public class AlbumListViewAdapter extends BaseAdapter {
 		Album album = mAlbums.get(position);
 		holder.mAlbumName.setText(album.mName);
 		holder.mAlbumNum.setText(album.mNum);
-		imageLoader.displayImage("file://" + album.mCoverUrl,
-				holder.mAlbumCover, Constants.image_display_options,
-				new Util.AnimateFirstDisplayListener());
+		fb.display(holder.mAlbumCover, album.mCoverUrl);
 
 		return view;
 	}

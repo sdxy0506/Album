@@ -5,12 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.xuyan.album.adapter.SendGridViewAdapter;
-import com.xuyan.album.application.SetApplication;
-import com.xuyan.album.application.UILApplication;
-
+import net.tsz.afinal.FinalBitmap;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,6 +18,10 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.xuyan.album.adapter.SendGridViewAdapter;
+import com.xuyan.album.application.SetApplication;
+import com.xuyan.album.application.UILApplication;
 
 public class TestActivity extends Activity implements SetApplication {
 
@@ -41,11 +41,15 @@ public class TestActivity extends Activity implements SetApplication {
 
 	private ArrayList<String> mSelectedPhotos = new ArrayList<String>();
 
+	private FinalBitmap fb;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.send);
 		mContext = this;
+		fb = FinalBitmap.create(mContext);
+		fb.configLoadingImage(R.drawable.ic_stub);
 		findViews();
 		setListener();
 
@@ -115,7 +119,8 @@ public class TestActivity extends Activity implements SetApplication {
 				&& resultCode == RESULT_OK) {
 			Toast.makeText(mContext, "从相册返回", Toast.LENGTH_SHORT).show();
 			mSelectedPhotos = setApplication().getSelectedPhotos();
-			gridViewAdapter = new SendGridViewAdapter(mContext, mSelectedPhotos);
+			gridViewAdapter = new SendGridViewAdapter(mContext,
+					mSelectedPhotos, fb);
 			send_gridView.setAdapter(gridViewAdapter);
 
 		} else if (requestCode == Constants.REQUEST_IMAGE_FILE

@@ -2,6 +2,7 @@ package com.xuyan.album.adapter;
 
 import java.util.ArrayList;
 
+import net.tsz.afinal.FinalBitmap;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,24 +11,23 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.xuyan.album.Constants;
 import com.xuyan.album.R;
-import com.xuyan.album.Util;
 
 public class SendGridViewAdapter extends BaseAdapter {
-
-	private ImageLoadingListener animateFirstListener = new Util.AnimateFirstDisplayListener();
 
 	private LayoutInflater mInflater;
 	private Context mContext;
 	private ArrayList<String> mSelectedPhotos;
 
-	public SendGridViewAdapter(Context context, ArrayList<String> photos) {
+	private FinalBitmap fb;
+
+	public SendGridViewAdapter(Context context, ArrayList<String> photos,
+			FinalBitmap finalBitmap) {
 		this.mContext = context;
 		this.mInflater = (LayoutInflater) mContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mSelectedPhotos = photos;
+		fb = finalBitmap;
 	}
 
 	@Override
@@ -62,10 +62,8 @@ public class SendGridViewAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-		holder.mButton.setClickable(false);
-		Constants.imageLoader.displayImage("file://" + getItem(position),
-				holder.mPic, Constants.image_display_options,
-				animateFirstListener);
+		holder.mButton.setVisibility(View.INVISIBLE);
+		fb.display(holder.mPic, mSelectedPhotos.get(position));
 		return view;
 	}
 

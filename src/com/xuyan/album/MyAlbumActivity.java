@@ -3,6 +3,7 @@ package com.xuyan.album;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.tsz.afinal.FinalBitmap;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -23,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.xuyan.album.adapter.AlbumListViewAdapter;
 import com.xuyan.album.adapter.GridViewAdapter;
 import com.xuyan.album.application.SetApplication;
@@ -54,9 +54,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 
 	private ProgressDialog progressDialog;
 
-	// 避免list，grid滑动滞后
-	PauseOnScrollListener pauseListener = new PauseOnScrollListener(
-			Constants.imageLoader, false, true);
+	private FinalBitmap fb;
 
 	/**
 	 * Called when the activity is first created.
@@ -69,6 +67,9 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 
 		eventBus = EventBus.getDefault();
 		eventBus.register(this);
+
+		fb = FinalBitmap.create(this);// 初始化FinalBitmap模块
+		fb.configLoadingImage(R.drawable.ic_stub);
 
 		findViews();
 		setListeners();
@@ -95,9 +96,6 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 		btn_album.setOnClickListener(btnListener);
 		btn_cancel.setOnClickListener(btnListener);
 		okButton.setOnClickListener(btnListener);
-		// 避免list，grid滑动滞后
-		listView.setOnScrollListener(pauseListener);
-		gridView.setOnScrollListener(pauseListener);
 	}
 
 	private OnClickListener btnListener = new OnClickListener() {
@@ -126,7 +124,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 	};
 
 	private void setAlbumsList() {
-		listViewAdapter = new AlbumListViewAdapter(mContext);
+		listViewAdapter = new AlbumListViewAdapter(mContext,fb);
 		listViewAdapter.setAlbumsList(albums);
 		listView.setAdapter(listViewAdapter);
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -181,7 +179,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 			title.setText(album_dir);
 			mPhotos = Constants.getPhotos(mContext, album_dir);
 			gridViewAdapter = new GridViewAdapter(mContext, mPhotos,
-					mSelectedPhotos);
+					mSelectedPhotos, fb);
 			gridView.setAdapter(gridViewAdapter);
 			gridViewAdapter
 					.setOnItemClickListener(new GridViewAdapter.OnItemClickListener() {
@@ -225,11 +223,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 
 									hashMap.put(path, imageView);
 									mSelectedPhotos.add(path);
-									Constants.imageLoader.displayImage(
-											"file://" + mPhotos.get(position),
-											imageView,
-											Constants.image_display_options,
-											new Util.AnimateFirstDisplayListener());
+									fb.display(imageView, mPhotos.get(position));
 									imageView
 											.setOnClickListener(new View.OnClickListener() {
 

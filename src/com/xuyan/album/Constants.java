@@ -17,17 +17,11 @@ package com.xuyan.album;
 
 import java.util.ArrayList;
 
-import android.R.integer;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.util.Log;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 /**
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
@@ -35,15 +29,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 public final class Constants {
 	public static final int REQUEST_IMAGE_FILE = 1;
 	public static final int REQUEST_IMAGE_CAMERA = 0;
-	public static final int MAX_PHOTOS = 4;
-	public static ImageLoader imageLoader = ImageLoader.getInstance();
-	// RoundedBitmapDisplayer 设置圆角的大小
-	public static DisplayImageOptions image_display_options = new DisplayImageOptions.Builder()
-			.showImageOnLoading(R.drawable.ic_stub)
-			.showImageForEmptyUri(R.drawable.ic_empty)
-			.showImageOnFail(R.drawable.ic_error)
-			.bitmapConfig(Bitmap.Config.RGB_565).cacheInMemory(true)
-			.cacheOnDisc(true).build();
+	public static final int MAX_PHOTOS = 8;
 
 	public static class Config {
 		public static final boolean DEVELOPER_MODE = false;
