@@ -23,7 +23,7 @@ import com.xuyan.album.adapter.SendGridViewAdapter;
 import com.xuyan.album.application.SetApplication;
 import com.xuyan.album.application.UILApplication;
 
-public class TestActivity extends Activity implements SetApplication {
+public class SayActivity extends Activity implements SetApplication {
 
 	private Context mContext;
 
@@ -79,7 +79,7 @@ public class TestActivity extends Activity implements SetApplication {
 			switch (v.getId()) {
 			case R.id.send_album:
 				intent.setClass(mContext, MyAlbumActivity.class);
-				startActivityForResult(intent, Constants.REQUEST_IMAGE_FILE);
+				startActivityForResult(intent, Util.REQUEST_IMAGE_FILE);
 				break;
 			case R.id.send_camera:
 				openImageCamera();
@@ -95,13 +95,12 @@ public class TestActivity extends Activity implements SetApplication {
 
 	private void openImageCamera() {
 		try {
-			// TODO: API < 1.6, images size too small
 			String filename = _getPhotoFilename(new Date());
 			mImageFile = new File(FileHelper.getBasePath(), filename);
 			mImageUri = Uri.fromFile(mImageFile);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-			startActivityForResult(intent, Constants.REQUEST_IMAGE_CAMERA);
+			startActivityForResult(intent, Util.REQUEST_IMAGE_CAMERA);
 		} catch (Exception e) {
 			Toast.makeText(mContext, "存储失败！", Toast.LENGTH_SHORT).show();
 		}
@@ -115,7 +114,7 @@ public class TestActivity extends Activity implements SetApplication {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == Constants.REQUEST_IMAGE_FILE
+		if (requestCode == Util.REQUEST_IMAGE_FILE
 				&& resultCode == RESULT_OK) {
 			Toast.makeText(mContext, "从相册返回", Toast.LENGTH_SHORT).show();
 			mSelectedPhotos = setApplication().getSelectedPhotos();
@@ -123,7 +122,7 @@ public class TestActivity extends Activity implements SetApplication {
 					mSelectedPhotos, fb);
 			send_gridView.setAdapter(gridViewAdapter);
 
-		} else if (requestCode == Constants.REQUEST_IMAGE_FILE
+		} else if (requestCode == Util.REQUEST_IMAGE_FILE
 				&& resultCode == RESULT_OK) {
 			mImageUri = data.getData();
 		}

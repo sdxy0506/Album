@@ -124,7 +124,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 	};
 
 	private void setAlbumsList() {
-		listViewAdapter = new AlbumListViewAdapter(mContext,fb);
+		listViewAdapter = new AlbumListViewAdapter(mContext, fb);
 		listViewAdapter.setAlbumsList(albums);
 		listView.setAdapter(listViewAdapter);
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -148,7 +148,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 			removeOneData(mSelectedPhotos, path);
 			if (mSelectedPhotos.size() > 0) {
 				okButton.setText("完成(" + mSelectedPhotos.size() + "/"
-						+ Constants.MAX_PHOTOS + ")");
+						+ Util.MAX_PHOTOS + ")");
 			} else {
 				okButton.setText("完成");
 			}
@@ -177,7 +177,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 			btn_album.setVisibility(View.VISIBLE);
 			String album_dir = albums.get(bundle.getInt("position")).mName;
 			title.setText(album_dir);
-			mPhotos = Constants.getPhotos(mContext, album_dir);
+			mPhotos = Util.getPhotos(mContext, album_dir);
 			gridViewAdapter = new GridViewAdapter(mContext, mPhotos,
 					mSelectedPhotos, fb);
 			gridView.setAdapter(gridViewAdapter);
@@ -187,14 +187,12 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 						public void onItemClick(
 								final ToggleButton toggleButton, int position,
 								final String path, boolean isChecked) {
-							if (mSelectedPhotos.size() >= Constants.MAX_PHOTOS) {
+							if (mSelectedPhotos.size() >= Util.MAX_PHOTOS) {
 								toggleButton.setChecked(false);
 								if (!removePath(path)) {
-									Toast.makeText(
-											MyAlbumActivity.this,
-											"只能选择" + Constants.MAX_PHOTOS
-													+ "张图片", Toast.LENGTH_SHORT)
-											.show();
+									Toast.makeText(MyAlbumActivity.this,
+											"只能选择" + Util.MAX_PHOTOS + "张图片",
+											Toast.LENGTH_SHORT).show();
 								}
 								return;
 							}
@@ -209,7 +207,6 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 									imageView.postDelayed(new Runnable() {
 										@Override
 										public void run() {
-
 											int off = selectedImageLayout
 													.getMeasuredWidth()
 													- scroll_view.getWidth();
@@ -217,7 +214,6 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 												scroll_view.smoothScrollTo(off,
 														0);
 											}
-
 										}
 									}, 100);
 
@@ -232,17 +228,11 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 													toggleButton
 															.setChecked(false);
 													removePath(path);
-
 												}
 											});
 									okButton.setText("完成("
 											+ mSelectedPhotos.size() + "/"
-											+ Constants.MAX_PHOTOS + ")");
-									for (int i = 0; i < mSelectedPhotos.size(); i++) {
-										Log.i("photo", mSelectedPhotos.get(i));
-
-									}
-
+											+ Util.MAX_PHOTOS + ")");
 								}
 							} else {
 								removePath(path);
@@ -258,7 +248,7 @@ public class MyAlbumActivity extends Activity implements SetApplication {
 		protected Object doInBackground(Object... params) {
 			albums = setApplication().getAlbums();
 			if (albums.size() == 0) {
-				albums = Constants.getAlbums(mContext);
+				albums = Util.getAlbums(mContext);
 			}
 			return null;
 		}

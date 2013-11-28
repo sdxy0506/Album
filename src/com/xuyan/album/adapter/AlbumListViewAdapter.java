@@ -28,14 +28,12 @@ import com.xuyan.album.R;
  * 相册列表适配器
  */
 public class AlbumListViewAdapter extends BaseAdapter {
-	// protected ImageLoader imageLoader = ImageLoader.getInstance();
 	private LayoutInflater mInflater;
 	private List<Album> mAlbums;
 	private Context context;
+	private FinalBitmap fb;
 
 	private String TAG = AlbumListViewAdapter.class.getSimpleName();
-
-	private FinalBitmap fb;
 
 	/**
 	 * 列表项目View持有者
@@ -54,7 +52,7 @@ public class AlbumListViewAdapter extends BaseAdapter {
 	 *            Context 上下文
 	 */
 	public AlbumListViewAdapter(Context ctx, FinalBitmap fBitmap) {
-		this.context = ctx;
+		this.setContext(ctx);
 		mAlbums = new ArrayList<Album>(0);
 		mInflater = (LayoutInflater) ctx
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -126,5 +124,13 @@ public class AlbumListViewAdapter extends BaseAdapter {
 		fb.display(holder.mAlbumCover, album.mCoverUrl);
 
 		return view;
+	}
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
 	}
 }

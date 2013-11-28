@@ -88,7 +88,7 @@ public class AlbumsListActivity extends Activity {
 		protected Object doInBackground(Object... params) {
 			albums = setApplication().getAlbums();
 			if (albums.size() == 0) {
-				albums = Constants.getAlbums(mContext);
+				albums = Util.getAlbums(mContext);
 			}
 			return null;
 		}

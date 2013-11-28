@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 
 /**
  * 
- * 可以根据屏幕宽度自动适应并将gridView显示为正方形
+ * 可以根据屏幕宽度自动适应并将gridView显示为正方形，使用时直接将其添加到xml文件中
  * 
  * @author xuyan 2013-11-26
  * 
