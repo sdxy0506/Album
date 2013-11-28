@@ -9,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +27,9 @@ import com.xuyan.album.adapter.AlbumListViewAdapter;
 import com.xuyan.album.adapter.GridViewAdapter;
 import com.xuyan.album.application.SetApplication;
 import com.xuyan.album.application.UILApplication;
+import com.xuyan.util.Album;
+import com.xuyan.util.TestEvent;
+import com.xuyan.util.Util;
 
 import de.greenrobot.event.EventBus;
 

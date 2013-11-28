@@ -1,6 +1,10 @@
-package com.xuyan.album;
+package com.xuyan.util;
 
 import java.util.ArrayList;
+
+import com.xuyan.album.R;
+
+import net.tsz.afinal.FinalBitmap;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -15,7 +19,7 @@ import android.util.Log;
 public class Util {
 	public static final int REQUEST_IMAGE_FILE = 1;
 	public static final int REQUEST_IMAGE_CAMERA = 0;
-	public static final int MAX_PHOTOS = 9;
+	public static final int MAX_PHOTOS = 9;// 能选择的图片的最大数量
 
 	/**
 	 * 获取图片所在文件夹名称

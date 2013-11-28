@@ -13,8 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xuyan.album.Album;
 import com.xuyan.album.R;
+import com.xuyan.util.Album;
 
 /**
  * Created with IntelliJ IDEA.

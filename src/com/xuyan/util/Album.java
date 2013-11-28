@@ -1,4 +1,4 @@
-package com.xuyan.album;
+package com.xuyan.util;
 
 public class Album
 {

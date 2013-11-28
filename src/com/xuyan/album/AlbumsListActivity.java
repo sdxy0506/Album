@@ -17,6 +17,8 @@ import android.widget.ListView;
 
 import com.xuyan.album.adapter.AlbumListViewAdapter;
 import com.xuyan.album.application.UILApplication;
+import com.xuyan.util.Album;
+import com.xuyan.util.Util;
 
 public class AlbumsListActivity extends Activity {
 	private ListView listView;

@@ -1,4 +1,4 @@
-package com.xuyan.album;
+package com.xuyan.util;
 
 import android.content.Context;
 import android.util.AttributeSet;

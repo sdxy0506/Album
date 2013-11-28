@@ -28,6 +28,8 @@ import android.widget.ToggleButton;
 
 import com.xuyan.album.adapter.GridViewAdapter;
 import com.xuyan.album.application.UILApplication;
+import com.xuyan.util.Album;
+import com.xuyan.util.Util;
 
 public class AlbumActivity extends Activity {
 	private Context mContext;
