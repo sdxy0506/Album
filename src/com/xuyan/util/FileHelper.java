@@ -6,7 +6,7 @@ import java.io.IOException;
 import android.os.Environment;
 
 public class FileHelper {
-	private static final String BASE_PATH = "SRX";
+	private static final String BASE_PATH = "Album";
 	private static final String VOICE_PATH = "voiceFile";
 	private static final String PIC_PATH = "imageFile";
 	private static final String TXT_PATH = "txtFile";

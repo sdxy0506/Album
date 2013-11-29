@@ -20,12 +20,19 @@
         </TextView>
 
         <Button
-            android:id="@+id/choise_album"
+            android:id="@+id/photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="相册"
+            android:visibility="invisible" >
+        </Button>
+
+        <Button
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="选取相册"
-            android:textSize="12sp" >
+            android:text="取消" >
         </Button>
     </RelativeLayout>
 
@@ -39,10 +46,10 @@
         <Button
             android:id="@+id/ok_button"
             android:layout_width="100dp"
-            android:layout_height="60dip"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="完成(0/8)" />
+            android:text="完成" />
 
         <HorizontalScrollView
             android:id="@+id/scrollview"
@@ -53,7 +60,7 @@
 
             <LinearLayout
                 android:id="@+id/selected_image_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal" >
@@ -69,6 +76,12 @@
         android:layout_below="@id/header"
         android:background="@android:color/black" >
 
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
         <GridView
             android:id="@+id/grid_view"
             android:layout_width="fill_parent"
@@ -83,7 +96,8 @@
             android:listSelector="@null"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="2dp" />
+            android:verticalSpacing="2dp"
+            android:visibility="invisible" />
     </RelativeLayout>
 
 </RelativeLayout>

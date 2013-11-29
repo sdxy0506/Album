@@ -15,9 +15,10 @@ import android.util.Log;
 public class Util {
 	public static final int REQUEST_IMAGE_FILE = 1;
 	public static final int REQUEST_IMAGE_CAMERA = 0;
+	public static final int REQUEST_IMAGE_PAGER = 2;
 	public static final int MAX_PHOTOS = 9;// 能选择的图片的最大数量
-	public static final String SELECT_PIC = "selected";
-	public static ArrayList<Album> ALBUMS = new ArrayList<Album>();
+	public static final String SELECT_PIC = "selected";// 传递已选择照片的key
+	public static final String POSITION_PIC = "position";// 当前图片的位置
 
 	/**
 	 * 获取图片所在文件夹名称
@@ -43,40 +44,35 @@ public class Util {
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
 				null, MediaStore.Images.Media.DEFAULT_SORT_ORDER);
 
-		try {
-			cursor.moveToFirst();
-			int fileNum = cursor.getCount();
+		cursor.moveToFirst();
+		int fileNum = cursor.getCount();
 
-			for (int counter = 0; counter < fileNum; counter++) {
-				String path = cursor.getString(cursor
-						.getColumnIndex(MediaStore.Images.Media.DATA));
-				// 获取路径中文件的目录
-				String file_dir = getDir(path);
+		for (int counter = 0; counter < fileNum; counter++) {
+			String path = cursor.getString(cursor
+					.getColumnIndex(MediaStore.Images.Media.DATA));
+			// 获取路径中文件的目录
+			String file_dir = getDir(path);
 
-				// 判断该目录是否已经存在于albums中，如果存在，则不添加到albums中；不存在则添加。
-				boolean in_albums = false;// 默认不存在于albums中
-				for (Album temp_album : albums) {
-					if (temp_album.mName.equals(file_dir)) {
-						// 存在于albums中
-						in_albums = true;
-						break;
-					}
+			// 判断该目录是否已经存在于albums中，如果存在，则不添加到albums中；不存在则添加。
+			boolean in_albums = false;// 默认不存在于albums中
+			for (Album temp_album : albums) {
+				if (temp_album.mName.equals(file_dir)) {
+					// 存在于albums中
+					in_albums = true;
+					break;
 				}
-
-				if (!in_albums) {
-					Album album = new Album();
-					album.mName = getDir(path);
-					album.mNum = "(" + getPicNum(context, album.mName) + ")";
-					album.mCoverUrl = path;
-					albums.add(album);
-				}
-				cursor.moveToNext();
 			}
-		} catch (Exception e) {
 
-		} finally {
-			cursor.close();
+			if (!in_albums) {
+				Album album = new Album();
+				album.mName = getDir(path);
+				album.mNum = "(" + getPicNum(context, album.mName) + ")";
+				album.mCoverUrl = path;
+				albums.add(album);
+			}
+			cursor.moveToNext();
 		}
+		cursor.close();
 
 		return albums;
 	}
@@ -117,6 +113,14 @@ public class Util {
 		return photo_num;
 	}
 
+	/**
+	 * 根据传入的相册名称，读取相册中的图片名称
+	 * 
+	 * @param context
+	 * @param album_dir
+	 *            相册名称
+	 * @return 图片名称的集合
+	 */
 	public static ArrayList<String> getPhotos(Context context, String album_dir) {
 		ArrayList<String> photos = new ArrayList<String>();
 		ContentResolver contentResolver = context.getContentResolver();

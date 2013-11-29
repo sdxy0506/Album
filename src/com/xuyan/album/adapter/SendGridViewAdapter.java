@@ -53,7 +53,7 @@ public class SendGridViewAdapter extends BaseAdapter {
 	public View getView(int position, View view, ViewGroup parent) {
 		ViewHolder holder;
 		if (view == null) {
-			view = mInflater.inflate(R.layout.select_imageview, parent, false);
+			view = mInflater.inflate(R.layout.album_select_imageview, parent, false);
 			holder = new ViewHolder();
 			holder.mPic = (ImageView) view.findViewById(R.id.image_view);
 			holder.mButton = (ToggleButton) view

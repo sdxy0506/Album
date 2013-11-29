@@ -66,7 +66,7 @@ public class MyAlbumActivity extends Activity implements GetApplication {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.album_main);
+		setContentView(R.layout.album_album);
 		mContext = this;
 
 		intent = getIntent();
@@ -207,7 +207,7 @@ public class MyAlbumActivity extends Activity implements GetApplication {
 								if (!hashMap.containsKey(path)) {
 									ImageView imageView = (ImageView) LayoutInflater
 											.from(MyAlbumActivity.this)
-											.inflate(R.layout.choose_imageview,
+											.inflate(R.layout.album_choose_imageview,
 													selectedImageLayout, false);
 									selectedImageLayout.addView(imageView);
 									imageView.postDelayed(new Runnable() {
@@ -295,7 +295,7 @@ public class MyAlbumActivity extends Activity implements GetApplication {
 			final ToggleButton toggleBtn) {
 
 		ImageView imageView = (ImageView) LayoutInflater.from(
-				MyAlbumActivity.this).inflate(R.layout.choose_imageview,
+				MyAlbumActivity.this).inflate(R.layout.album_choose_imageview,
 				selectedImageLayout, false);
 		selectedImageLayout.addView(imageView);
 		imageView.postDelayed(new Runnable() {
