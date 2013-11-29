@@ -110,6 +110,11 @@ public class SayActivity extends Activity implements GetApplication {
 	};
 
 	private void openImageCamera() {
+		if (mSelectedPhotos.size() == Util.MAX_PHOTOS) {
+			Toast.makeText(mContext, "只能选择" + Util.MAX_PHOTOS + "张图片",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
 		try {
 			String filename = _getPhotoFilename(new Date());
 			mImageFile = new File(FileHelper.getBasePath(), filename);
@@ -156,7 +161,7 @@ public class SayActivity extends Activity implements GetApplication {
 
 		@Override
 		protected Object doInBackground(Object... params) {
-			Util.ALBUMS = Util.getAlbums(mContext);
+			// Util.ALBUMS = Util.getAlbums(mContext);
 			return null;
 		}
 

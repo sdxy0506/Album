@@ -42,35 +42,41 @@ public class Util {
 		Cursor cursor = contentResolver.query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
 				null, MediaStore.Images.Media.DEFAULT_SORT_ORDER);
-		cursor.moveToFirst();
-		int fileNum = cursor.getCount();
 
-		for (int counter = 0; counter < fileNum; counter++) {
-			String path = cursor.getString(cursor
-					.getColumnIndex(MediaStore.Images.Media.DATA));
-			// 获取路径中文件的目录
-			String file_dir = getDir(path);
+		try {
+			cursor.moveToFirst();
+			int fileNum = cursor.getCount();
 
-			// 判断该目录是否已经存在于albums中，如果存在，则不添加到albums中；不存在则添加。
-			boolean in_albums = false;// 默认不存在于albums中
-			for (Album temp_album : albums) {
-				if (temp_album.mName.equals(file_dir)) {
-					// 存在于albums中
-					in_albums = true;
-					break;
+			for (int counter = 0; counter < fileNum; counter++) {
+				String path = cursor.getString(cursor
+						.getColumnIndex(MediaStore.Images.Media.DATA));
+				// 获取路径中文件的目录
+				String file_dir = getDir(path);
+
+				// 判断该目录是否已经存在于albums中，如果存在，则不添加到albums中；不存在则添加。
+				boolean in_albums = false;// 默认不存在于albums中
+				for (Album temp_album : albums) {
+					if (temp_album.mName.equals(file_dir)) {
+						// 存在于albums中
+						in_albums = true;
+						break;
+					}
 				}
-			}
 
-			if (!in_albums) {
-				Album album = new Album();
-				album.mName = getDir(path);
-				album.mNum = "(" + getPicNum(context, album.mName) + ")";
-				album.mCoverUrl = path;
-				albums.add(album);
+				if (!in_albums) {
+					Album album = new Album();
+					album.mName = getDir(path);
+					album.mNum = "(" + getPicNum(context, album.mName) + ")";
+					album.mCoverUrl = path;
+					albums.add(album);
+				}
+				cursor.moveToNext();
 			}
-			cursor.moveToNext();
+		} catch (Exception e) {
+
+		} finally {
+			cursor.close();
 		}
-		cursor.close();
 
 		return albums;
 	}

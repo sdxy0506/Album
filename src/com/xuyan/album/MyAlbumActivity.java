@@ -252,49 +252,24 @@ public class MyAlbumActivity extends Activity implements GetApplication {
 
 		@Override
 		protected Object doInBackground(Object... params) {
-			albums = Util.ALBUMS;
+			// albums = Util.ALBUMS;
+			albums = Util.getAlbums(mContext);
 
 			mSelectedPhotos.addAll(intent
 					.getStringArrayListExtra(Util.SELECT_PIC));
-			int count = mSelectedPhotos.size();
-			for (int i = 0; i < count; i++) {
-				final String mPath = mSelectedPhotos.get(i);
-				ImageView imageView = (ImageView) LayoutInflater.from(
-						MyAlbumActivity.this).inflate(
-						R.layout.choose_imageview, selectedImageLayout, false);
-				selectedImageLayout.addView(imageView);
-				imageView.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						int off = selectedImageLayout.getMeasuredWidth()
-								- scroll_view.getWidth();
-						if (off > 0) {
-							scroll_view.smoothScrollTo(off, 0);
-						}
-					}
-				}, 100);
 
-				hashMap.put(mPath, imageView);
-				fb.display(imageView, mPath);
-				imageView.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						if (gridViewAdapter != null) {
-							gridViewAdapter.notifyDataSetChanged();
-						}
-						removePath(mPath);
-					}
-				});
-				okButton.setText("完成(" + mSelectedPhotos.size() + "/"
-						+ Util.MAX_PHOTOS + ")");
-			}
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Object result) {
 			super.onPostExecute(result);
+			int count = mSelectedPhotos.size();
+			for (int i = 0; i < count; i++) {
+				String mPath = mSelectedPhotos.get(i);
+				setGridImageView(mPath, null);
+			}
+
 			setAlbumsList();
 			progressDialog.dismiss();
 		}
@@ -314,6 +289,47 @@ public class MyAlbumActivity extends Activity implements GetApplication {
 	@Override
 	protected void onPause() {
 		super.onPause();
+	}
+
+	private void setGridImageView(final String mPath,
+			final ToggleButton toggleBtn) {
+
+		ImageView imageView = (ImageView) LayoutInflater.from(
+				MyAlbumActivity.this).inflate(R.layout.choose_imageview,
+				selectedImageLayout, false);
+		selectedImageLayout.addView(imageView);
+		imageView.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				int off = selectedImageLayout.getMeasuredWidth()
+						- scroll_view.getWidth();
+				if (off > 0) {
+					scroll_view.smoothScrollTo(off, 0);
+				}
+			}
+		}, 100);
+
+		hashMap.put(mPath, imageView);
+		if (toggleBtn != null) {
+			mSelectedPhotos.add(mPath);
+		}
+		fb.display(imageView, mPath);
+		imageView.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (gridViewAdapter != null) {
+					gridViewAdapter.notifyDataSetChanged();
+				}
+				if (toggleBtn != null) {
+					toggleBtn.setChecked(false);
+				}
+				removePath(mPath);
+			}
+		});
+		okButton.setText("完成(" + mSelectedPhotos.size() + "/" + Util.MAX_PHOTOS
+				+ ")");
+
 	}
 
 }
