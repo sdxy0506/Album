@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.tsz.afinal.FinalBitmap;
+import net.tsz.afinal.FinalDb;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

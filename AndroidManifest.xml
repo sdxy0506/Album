@@ -34,15 +34,17 @@
         <activity
             android:name="com.xuyan.album.SayActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.xuyan.album.ImagePagerActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity android:name="com.xuyan.album.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.xuyan.album.ImagePagerActivity"
-            android:label="@string/app_name" >
         </activity>
     </application>
 

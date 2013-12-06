@@ -1,4 +1,4 @@
-package com.xuyan.util;
+package com.xuyan.album.tools;
 
 import java.io.File;
 import java.io.IOException;

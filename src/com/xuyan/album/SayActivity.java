@@ -6,10 +6,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import net.tsz.afinal.FinalBitmap;
+
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -24,7 +28,9 @@ import android.widget.Toast;
 import com.xuyan.album.adapter.SendGridViewAdapter;
 import com.xuyan.album.application.GetApplication;
 import com.xuyan.album.application.UILApplication;
-import com.xuyan.util.FileHelper;
+import com.xuyan.album.http.RequestAid;
+import com.xuyan.album.tools.FileHelper;
+import com.xuyan.util.MyParameters;
 import com.xuyan.util.Util;
 
 public class SayActivity extends Activity implements GetApplication {
@@ -43,6 +49,9 @@ public class SayActivity extends Activity implements GetApplication {
 	private Uri mImageUri;
 
 	private FinalBitmap fb;
+
+	public static String APP_SESSION_ID_NAME = "APPSESSIONID";
+	public static String Post = "http://api.3ren.cn/activities/publish.json";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +99,34 @@ public class SayActivity extends Activity implements GetApplication {
 				openImageCamera();
 				break;
 			case R.id.send_send:
+				String content = tv_say.getText().toString().trim();
+				if (mSelectedPhotos.size() > 0) {
+					if (tv_say.length() <= 140) {
+						new PostSayTask().execute(content);
+					} else {
+						Toast.makeText(mContext, "输入数目超过140个字！",
+								Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					if (tv_say.length() <= 140 && tv_say.length() > 0) {
+						new PostSayTask().execute(content);
+					} else if (tv_say.length() > 140) {
+						Toast.makeText(mContext, "输入数目超过140个字！",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(mContext, "输入内容不能为空！",
+								Toast.LENGTH_SHORT).show();
+					}
+				}
+
+				break;
+			case R.id.send_cancel:
+				mSelectedPhotos
+						.add("http://hiphotos.bdimg.com/album/s%3D680%3Bq%3D90/sign=e1decf7e1138534388cf8429a328c143/b7fd5266d01609247fec9e09d50735fae7cd34d2.jpg");
+				gridViewAdapter = new SendGridViewAdapter(mContext,
+						mSelectedPhotos, fb);
+				send_gridView.setAdapter(gridViewAdapter);
+				setGridAdapter();
 				break;
 			default:
 				break;
@@ -173,4 +210,65 @@ public class SayActivity extends Activity implements GetApplication {
 	public UILApplication getMyApplication() {
 		return ((UILApplication) super.getApplicationContext());
 	}
+
+	public static String getRandomString(int length) {
+		// 定义验证码的字符表
+		String chars = "3323456789ABCDEFGHHJKLMNNPQRSTUVWXYZ";
+		char[] rands = new char[length];
+		for (int i = 0; i < length; i++) {
+			int rand = (int) (Math.random() * 36);
+			rands[i] = chars.charAt(rand);
+		}
+		return new String(rands);
+	}
+
+	private class PostSayTask extends AsyncTask<String, Object, Integer> {
+
+		@Override
+		protected Integer doInBackground(String... params) {
+
+			String content = params[0];
+			MyParameters parameters = new MyParameters();
+			parameters.add("message", content);
+			parameters.add("where", "Android");
+			if (mSelectedPhotos.size() > 0) {
+				parameters.add("imageFile", mSelectedPhotos.get(0));
+			}
+
+			try {
+				String ret = RequestAid.openUrl(mContext, Post, "POST",
+						parameters);
+				JSONObject jsonObject = new JSONObject(ret);
+				if (jsonObject.getInt("s") == 200) {
+					return 100;
+				} else {
+					return 101;
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 101;
+			}
+
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+
+			switch (result) {
+			case 100:
+				Toast.makeText(mContext, "发布成功！", Toast.LENGTH_SHORT).show();
+				break;
+			case 101:
+				Toast.makeText(mContext, "发布失败！", Toast.LENGTH_SHORT).show();
+				break;
+
+			default:
+				break;
+			}
+
+		}
+
+	}
+
 }

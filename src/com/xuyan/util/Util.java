@@ -19,6 +19,9 @@ public class Util {
 	public static final int MAX_PHOTOS = 9;// 能选择的图片的最大数量
 	public static final String SELECT_PIC = "selected";// 传递已选择照片的key
 	public static final String POSITION_PIC = "position";// 当前图片的位置
+	public static final String PUT_BAIDU = "http://bcs.duapp.com/xalbum?";
+	public static final String USER_NAME = "13000000000";
+	public static final String PASSWORD = "123456";
 
 	/**
 	 * 获取图片所在文件夹名称
