@@ -16,6 +16,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -23,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xuyan.album.adapter.SendGridViewAdapter;
@@ -38,6 +41,7 @@ public class SayActivity extends Activity {
 	private Button btn_camera;
 	private Button btn_album;
 	private EditText tv_say;
+	private TextView tv_limit;
 
 	private GridView send_gridView;
 	private SendGridViewAdapter gridViewAdapter;
@@ -69,6 +73,7 @@ public class SayActivity extends Activity {
 		btn_send = (Button) findViewById(R.id.send_send);
 		tv_say = (EditText) findViewById(R.id.send_say);
 		send_gridView = (GridView) findViewById(R.id.send_grid);
+		tv_limit = (TextView) findViewById(R.id.limit);
 	}
 
 	// 绑定各类事件
@@ -77,6 +82,29 @@ public class SayActivity extends Activity {
 		btn_camera.setOnClickListener(btnListener);
 		btn_cancel.setOnClickListener(btnListener);
 		btn_send.setOnClickListener(btnListener);
+		tv_say.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+					int arg3) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable arg0) {
+				int length = tv_say.length();
+				tv_limit.setText(length + "/140");
+
+			}
+		});
 	}
 
 	private OnClickListener btnListener = new OnClickListener() {

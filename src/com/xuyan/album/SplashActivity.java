@@ -107,7 +107,7 @@ public class SplashActivity extends Activity {
 					RequestAid.setRequestHeader("Cookie", cookie);
 					RequestAid.setRequestHeader("APPSESSIONID",
 							SharpParameter.sessionId);
-				} else if (jsonObject.getInt("s") == 301) {
+				} else {
 					JSONObject mJsonObject = jsonObject.getJSONObject("data");
 					errorCode = mJsonObject.getInt("errorCode");
 					msg = jsonObject.getString("msg");

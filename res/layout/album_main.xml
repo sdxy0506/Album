@@ -20,8 +20,8 @@
         android:layout_below="@id/send_title"
         android:layout_marginTop="5dip"
         android:hint="内容..."
-        android:maxLength="30"
-        android:maxLines="5" />
+        android:maxLength="140"
+        android:maxLines="4" />
 
     <LinearLayout
         android:id="@+id/bottom"
@@ -92,6 +92,14 @@
             android:stretchMode="columnWidth"
             android:verticalSpacing="2dp" >
         </GridView>
+
+        <TextView
+            android:id="@+id/limit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
 
 </RelativeLayout>
