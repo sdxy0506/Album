@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.tsz.afinal.FinalBitmap;
-import net.tsz.afinal.FinalDb;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,15 +26,13 @@ import android.widget.ToggleButton;
 
 import com.xuyan.album.adapter.AlbumListViewAdapter;
 import com.xuyan.album.adapter.GridViewAdapter;
-import com.xuyan.album.application.GetApplication;
-import com.xuyan.album.application.UILApplication;
 import com.xuyan.util.Album;
 import com.xuyan.util.TestEvent;
 import com.xuyan.util.Util;
 
 import de.greenrobot.event.EventBus;
 
-public class MyAlbumActivity extends Activity implements GetApplication {
+public class MyAlbumActivity extends Activity {
 	private Context mContext;
 	private ListView listView;
 	private AlbumListViewAdapter listViewAdapter;
@@ -208,7 +205,8 @@ public class MyAlbumActivity extends Activity implements GetApplication {
 								if (!hashMap.containsKey(path)) {
 									ImageView imageView = (ImageView) LayoutInflater
 											.from(MyAlbumActivity.this)
-											.inflate(R.layout.album_choose_imageview,
+											.inflate(
+													R.layout.album_choose_imageview,
 													selectedImageLayout, false);
 									selectedImageLayout.addView(imageView);
 									imageView.postDelayed(new Runnable() {
@@ -280,11 +278,6 @@ public class MyAlbumActivity extends Activity implements GetApplication {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-	}
-
-	@Override
-	public UILApplication getMyApplication() {
-		return ((UILApplication) super.getApplicationContext());
 	}
 
 	@Override

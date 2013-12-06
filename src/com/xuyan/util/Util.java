@@ -19,9 +19,13 @@ public class Util {
 	public static final int MAX_PHOTOS = 9;// 能选择的图片的最大数量
 	public static final String SELECT_PIC = "selected";// 传递已选择照片的key
 	public static final String POSITION_PIC = "position";// 当前图片的位置
-	public static final String PUT_BAIDU = "http://bcs.duapp.com/xalbum?";
+	public static final String PUT_BAIDU = "http://hiphotos.bdimg.com/album/s%3D680%3Bq%3D90/sign=e1decf7e1138534388cf8429a328c143/b7fd5266d01609247fec9e09d50735fae7cd34d2.jpg";
 	public static final String USER_NAME = "13000000000";
 	public static final String PASSWORD = "123456";
+	public static String APP_SESSION_ID_NAME = "APPSESSIONID";
+	public static String Post = "http://api.3ren.cn/activities/publish.json";
+	public static final int LOGIN_OK = 100;
+	public static final int LOGIN_FAIL = 101;
 
 	/**
 	 * 获取图片所在文件夹名称

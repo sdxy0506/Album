@@ -26,14 +26,12 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.xuyan.album.adapter.SendGridViewAdapter;
-import com.xuyan.album.application.GetApplication;
-import com.xuyan.album.application.UILApplication;
 import com.xuyan.album.http.RequestAid;
 import com.xuyan.album.tools.FileHelper;
 import com.xuyan.util.MyParameters;
 import com.xuyan.util.Util;
 
-public class SayActivity extends Activity implements GetApplication {
+public class SayActivity extends Activity {
 	private Context mContext;
 	private Button btn_cancel;
 	private Button btn_send;
@@ -49,9 +47,6 @@ public class SayActivity extends Activity implements GetApplication {
 	private Uri mImageUri;
 
 	private FinalBitmap fb;
-
-	public static String APP_SESSION_ID_NAME = "APPSESSIONID";
-	public static String Post = "http://api.3ren.cn/activities/publish.json";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +116,7 @@ public class SayActivity extends Activity implements GetApplication {
 
 				break;
 			case R.id.send_cancel:
-				mSelectedPhotos
-						.add("http://hiphotos.bdimg.com/album/s%3D680%3Bq%3D90/sign=e1decf7e1138534388cf8429a328c143/b7fd5266d01609247fec9e09d50735fae7cd34d2.jpg");
+				mSelectedPhotos.add(Util.PUT_BAIDU);
 				gridViewAdapter = new SendGridViewAdapter(mContext,
 						mSelectedPhotos, fb);
 				send_gridView.setAdapter(gridViewAdapter);
@@ -206,11 +200,6 @@ public class SayActivity extends Activity implements GetApplication {
 		});
 	}
 
-	@Override
-	public UILApplication getMyApplication() {
-		return ((UILApplication) super.getApplicationContext());
-	}
-
 	public static String getRandomString(int length) {
 		// 定义验证码的字符表
 		String chars = "3323456789ABCDEFGHHJKLMNNPQRSTUVWXYZ";
@@ -236,18 +225,18 @@ public class SayActivity extends Activity implements GetApplication {
 			}
 
 			try {
-				String ret = RequestAid.openUrl(mContext, Post, "POST",
+				String ret = RequestAid.openUrl(mContext, Util.Post, "POST",
 						parameters);
 				JSONObject jsonObject = new JSONObject(ret);
 				if (jsonObject.getInt("s") == 200) {
-					return 100;
+					return Util.LOGIN_OK;
 				} else {
-					return 101;
+					return Util.LOGIN_FAIL;
 				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				return 101;
+				return Util.LOGIN_FAIL;
 			}
 
 		}
@@ -256,13 +245,12 @@ public class SayActivity extends Activity implements GetApplication {
 		protected void onPostExecute(Integer result) {
 
 			switch (result) {
-			case 100:
+			case Util.LOGIN_OK:
 				Toast.makeText(mContext, "发布成功！", Toast.LENGTH_SHORT).show();
 				break;
-			case 101:
+			case Util.LOGIN_FAIL:
 				Toast.makeText(mContext, "发布失败！", Toast.LENGTH_SHORT).show();
 				break;
-
 			default:
 				break;
 			}

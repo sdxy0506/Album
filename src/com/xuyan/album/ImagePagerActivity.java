@@ -32,9 +32,6 @@ import android.widget.TextView;
 import com.xuyan.album.adapter.ImagePagerAdapter;
 import com.xuyan.util.Util;
 
-/**
- * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
- */
 public class ImagePagerActivity extends Activity {
 
 	private ViewPager pager;
@@ -53,8 +50,8 @@ public class ImagePagerActivity extends Activity {
 		mContext = this;
 
 		fb = FinalBitmap.create(mContext);
-		fb.configLoadfailImage(R.drawable.ic_error);
-		fb.configLoadingImage(R.drawable.ic_stub);
+		fb.configLoadfailImage(R.drawable.ic_error).configLoadingImage(
+				R.drawable.ic_stub);
 		findViews();
 		init();
 
