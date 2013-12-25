@@ -2,6 +2,8 @@ package com.xuyan.album.adapter;
 
 import java.util.ArrayList;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 import net.tsz.afinal.FinalBitmap;
 import android.content.Context;
 import android.os.Parcelable;
@@ -21,6 +23,8 @@ public class ImagePagerAdapter extends PagerAdapter {
 	private Context context;
 	private FinalBitmap fb;
 
+	private PhotoViewAttacher mAttacher;
+
 	public ImagePagerAdapter(Context contexts, ArrayList<String> images,
 			FinalBitmap fBitmap) {
 		this.mSelectedImages = images;
@@ -33,7 +37,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		((ViewPager)container).removeView((View) object);
+		((ViewPager) container).removeView((View) object);
 	}
 
 	@Override
@@ -48,6 +52,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 		ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
 		fb.display(imageView, mSelectedImages.get(position));
 		view.addView(imageLayout, 0);
+		mAttacher = new PhotoViewAttacher(imageView);
 		return imageLayout;
 	}
 

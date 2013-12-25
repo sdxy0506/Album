@@ -17,6 +17,8 @@ package com.xuyan.album;
 
 import java.util.ArrayList;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 import net.tsz.afinal.FinalBitmap;
 import android.app.Activity;
 import android.content.Context;
@@ -43,7 +45,7 @@ public class ImagePagerActivity extends Activity {
 	private TextView tv_noPic;
 	FinalBitmap fb;
 	private ImagePagerAdapter imagePagerAdapter;
-
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.album_pager);
