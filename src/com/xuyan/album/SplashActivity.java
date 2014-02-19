@@ -1,56 +1,70 @@
 package com.xuyan.album;
 
-import org.json.JSONObject;
+import com.renn.rennsdk.RennClient;
+import com.renn.rennsdk.RennClient.LoginListener;
+import com.xuyan.util.ToastUtil;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.xuyan.album.http.RequestAid;
-import com.xuyan.util.SharpParameter;
-import com.xuyan.util.MyParameters;
-import com.xuyan.util.Util;
-
-public class SplashActivity extends Activity {
-	private static Context mContext;
-	private static int LOGIN_OK = 100;
-	private static int LOGIN_FAIL = 101;
-	private String userName = "";
-	private String passWord = "";
-	private boolean login = false;
-	private SharedPreferences dataBase;
-	private String msg;
+public class SplashActivity extends Activity implements OnClickListener {
+	private Context mContext;
+	private ImageView splashImg;
+	private RennClient rennClient;
+	private Button btn_login;
 	private static final String TAG = "SplashActivity";
 
-	private int errorCode = 0;
+	private static final String APP_ID = "168802";
+	private static final String API_KEY = "e884884ac90c4182a426444db12915bf";
+	private static final String SECRET_KEY = "094de55dc157411e8a5435c6a7c134c5";
 
-	@SuppressLint({ "NewApi", "NewApi", "NewApi" })
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_splash);
 		mContext = this;
-		dataBase = getSharedPreferences(SharpParameter.dataBase, MODE_PRIVATE);
-		login = true;
-		userName = Util.USER_NAME;
-		passWord = Util.PASSWORD;
-		SharpParameter.sessionId = SayActivity.getRandomString(12);
-		RequestAid.setRequestHeader(SharpParameter.APP_SESSION_ID_NAME,
-				SharpParameter.sessionId);
-		if (login && !userName.equals("false") && !passWord.equals("false")) {
-			MyParameters srxParameters = new MyParameters();
-			srxParameters.add("username", userName);
-			srxParameters.add("password", passWord);
-			new LoginGenericTask().execute(srxParameters);
-		}
+
+		init();
+	}
+
+	private void init() {
+		btn_login = (Button) findViewById(R.id.login);
+		btn_login.setOnClickListener(this);
+		splashImg = (ImageView) findViewById(R.id.img_splash);
+		Animation animation = AnimationUtils.loadAnimation(this, R.anim.splash);
+		splashImg.setAnimation(animation);
+		rennClient = RennClient.getInstance(this);
+		rennClient.init(APP_ID, API_KEY, SECRET_KEY);
+		rennClient
+				.setScope("read_user_blog read_user_photo read_user_status read_user_album "
+						+ "read_user_comment read_user_share publish_blog publish_share "
+						+ "send_notification photo_upload status_update create_album "
+						+ "publish_comment publish_feed");
+		rennClient.setTokenType("bearer");
+		new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				if (rennClient.isLogin()) {
+					jump();
+				} else {
+					btn_login.setVisibility(View.VISIBLE);
+				}
+
+			}
+		}, 2000);
 	}
 
 	@Override
@@ -59,86 +73,42 @@ public class SplashActivity extends Activity {
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
-	private class LoginGenericTask extends
-			AsyncTask<MyParameters, Object, Integer> {
-
-		@Override
-		protected Integer doInBackground(MyParameters... params) {
-			MyParameters param = params[0];
-			String user = (String) param.getValue("username");
-			String pass = (String) param.getValue("password");
-
-			try {
-				String ret = RequestAid.openUrl(mContext,
-						SharpParameter.loginUrl, "POST", param);
-				JSONObject jsonObject = new JSONObject(ret);
-				if (jsonObject.getInt("s") == 200) {
-					JSONObject mJsonObject = jsonObject.getJSONObject("data");
-					int id = mJsonObject.getInt("id");
-					String access_token = mJsonObject.getString("access_token");
-					SharpParameter.UId = String.valueOf(id);
-					msg = jsonObject.getString("msg");
-					dataBase.edit().putString("msg", msg).commit();
-					dataBase.edit().putInt("id", id).commit();
-					dataBase.edit().putString("access_token", access_token)
-							.commit();
-					// 保存帐号
-					dataBase.edit().putString("userName", user).commit();
-					dataBase.edit()
-							.putString("passWord",
-									SharpParameter.sharpDES.encrypt(pass))
-							.commit();
-					dataBase.edit().putBoolean("login", true).commit();
-					dataBase.edit().putString("avatar",
-							mJsonObject.getString("avatar"));
-					dataBase.edit().putString("nickname",
-							mJsonObject.getString("nickname"));
-					SharpParameter.nickname = mJsonObject.getString("nickname");
-					SharpParameter.avatar = mJsonObject.getString("avatar");
-					String cookie = "id=" + id + "; access_token="
-							+ access_token;
-					SharpParameter.cookie = cookie;
-					Log.i("cookiee", cookie);
-					RequestAid.setRequestHeader("Cookie", cookie);
-					RequestAid.setRequestHeader("APPSESSIONID",
-							SharpParameter.sessionId);
-				} else {
-					JSONObject mJsonObject = jsonObject.getJSONObject("data");
-					errorCode = mJsonObject.getInt("errorCode");
-					msg = jsonObject.getString("msg");
-					return LOGIN_FAIL;
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.login:
+			rennClient.setLoginListener(new LoginListener() {
+				@Override
+				public void onLoginSuccess() {
+					ToastUtil.showMessage(mContext, "登录成功!");
+					btn_login.setVisibility(View.GONE);
+					jump();
 				}
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				msg = "登录失败,请稍候重试!";
-				return LOGIN_FAIL;
-			}
-			return LOGIN_OK;
-		}
+				@Override
+				public void onLoginCanceled() {
+					ToastUtil.showMessage(mContext, "登录失败!");
+				}
 
-		protected void onPostExecute(Integer result) {
-			super.onPostExecute(result);
+			});
+			rennClient.login(this);
+			break;
 
-			switch (result) {
-			case 100:
-				Intent intent = new Intent();
-				intent.setClass(mContext, SayActivity.class);
-				startActivity(intent);
-				finish();
-				break;
-			case 101:
-				Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-				break;
-
-			default:
-				break;
-			}
+		default:
+			break;
 		}
 	}
+
+	private void jump() {
+		Intent intent = new Intent();
+		intent.setClass(mContext, MainActivity.class);
+		startActivity(intent);
+		finish();
+		overridePendingTransition(R.anim.fadding_in, R.anim.fadding_out);
+	}
+
 }
