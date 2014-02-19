@@ -1,6 +1,7 @@
 package com.xuyan.album;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -192,7 +193,14 @@ public class SayActivity extends Activity {
 			break;
 		case Util.REQUEST_IMAGE_CAMERA:
 			if (resultCode == RESULT_OK) {
-				mSelectedPhotos.add(mImageUri.toString());
+				try {
+					mSelectedPhotos.add(Uri.fromFile(
+							FileHelper.compressAndTransfer(mImageFile))
+							.toString());
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+
 			}
 			break;
 		case Util.REQUEST_IMAGE_PAGER:
