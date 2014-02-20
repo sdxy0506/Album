@@ -10,7 +10,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +26,7 @@ import com.renn.rennsdk.exception.RennException;
 import com.renn.rennsdk.param.ListAlbumParam;
 import com.xuyan.album.adapter.RenRenAlbumListAdapter;
 import com.xuyan.album.object.RenRenAlbum;
+import com.xuyan.util.ToastUtil;
 
 /**
  * 文件名称：FriendAlbumListActivity.java 类说明：
@@ -31,7 +35,8 @@ import com.xuyan.album.object.RenRenAlbum;
  * @author xuyan
  * @version 1.0
  */
-public class FriendAlbumListActivity extends Activity {
+public class FriendAlbumListActivity extends Activity implements
+		OnItemClickListener {
 
 	private String fid = null;
 	private TextView tv_name;
@@ -55,6 +60,7 @@ public class FriendAlbumListActivity extends Activity {
 		tv_name.setText(intent.getStringExtra("name"));
 		renren_album_list = (ListView) findViewById(R.id.renren_album_list);
 		getAlbumList();
+		renren_album_list.setOnItemClickListener(this);
 
 	}
 
@@ -86,8 +92,7 @@ public class FriendAlbumListActivity extends Activity {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-					Toast.makeText(FriendAlbumListActivity.this, "获取成功",
-							Toast.LENGTH_SHORT).show();
+					ToastUtil.showMessage(FriendAlbumListActivity.this, "获取成功");
 					if (mProgressDialog != null) {
 						mProgressDialog.dismiss();
 						mProgressDialog = null;
@@ -107,5 +112,17 @@ public class FriendAlbumListActivity extends Activity {
 		} catch (RennException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+		Intent intent = new Intent();
+		intent.putExtra("album_name", albumList.get(position).getName());
+		intent.putExtra("album_id", albumList.get(position).getId());
+		intent.putExtra("fid", fid);
+		intent.setClass(FriendAlbumListActivity.this, RenRenAlbumActivity.class);
+		startActivity(intent);
+		overridePendingTransition(R.anim.fadding_in, R.anim.fadding_out);
+
 	}
 }

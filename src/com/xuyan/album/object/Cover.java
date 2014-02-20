@@ -20,7 +20,7 @@ public class Cover {
 		this.size = size;
 		this.url = url;
 	}
-
+	
 	public String getSize() {
 		return size;
 	}

@@ -15,16 +15,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:maxLength="8"
             android:text="相册"
-            android:textSize="25sp" >
+            android:textSize="18sp" >
         </TextView>
 
         <Button
             android:id="@+id/renren_album_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="相册"
-            android:visibility="invisible" >
+            android:text="返回" >
         </Button>
 
         <Button
@@ -37,50 +37,12 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/renren_album_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:background="#FFF" >
-
-        <Button
-            android:id="@+id/renren_album_ok_button"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="完成" />
-
-        <HorizontalScrollView
-            android:id="@+id/renren_album_scrollview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_toLeftOf="@+id/renren_album_ok_button"
-            android:scrollbars="none" >
-
-            <LinearLayout
-                android:id="@+id/renren_album_selected_image_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-            </LinearLayout>
-        </HorizontalScrollView>
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/renren_album_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/renren_album_bottom"
         android:layout_below="@id/renren_album_header"
         android:background="@android:color/black" >
-
-        <ListView
-            android:id="@+id/renren_album_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible" />
 
         <GridView
             android:id="@+id/renren_album_grid_view"
@@ -96,8 +58,7 @@
             android:listSelector="@null"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="2dp"
-            android:visibility="invisible" />
+            android:verticalSpacing="2dp" />
     </RelativeLayout>
 
 </RelativeLayout>

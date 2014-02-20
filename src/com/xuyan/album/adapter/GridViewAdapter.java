@@ -91,7 +91,8 @@ public class GridViewAdapter extends BaseAdapter implements OnClickListener {
 	public View getView(int position, View view, ViewGroup parent) {
 		ViewHolder holder;
 		if (view == null) {
-			view = mInflater.inflate(R.layout.album_select_imageview, parent, false);
+			view = mInflater.inflate(R.layout.album_select_imageview, parent,
+					false);
 			holder = new ViewHolder();
 			// 获取到资源
 			holder.mPic = (ImageView) view.findViewById(R.id.image_view);
@@ -117,11 +118,15 @@ public class GridViewAdapter extends BaseAdapter implements OnClickListener {
 	}
 
 	private boolean isInSelectedDataList(String selectedString) {
+		if (mSelectedPhotos == null) {
+			return false;
+		}
 		for (int i = 0; i < mSelectedPhotos.size(); i++) {
 			if (mSelectedPhotos.get(i).equals(selectedString)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 

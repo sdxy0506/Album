@@ -84,14 +84,14 @@ public class MyAlbumActivity extends Activity {
 	}
 
 	private void findViews() {
-		listView = (ListView) this.findViewById(R.id.list_view);
-		gridView = (GridView) this.findViewById(R.id.grid_view);
-		selectedImageLayout = (LinearLayout) findViewById(R.id.selected_image_layout);
-		scroll_view = (HorizontalScrollView) findViewById(R.id.scrollview);
-		title = (TextView) this.findViewById(R.id.title);
-		btn_album = (Button) this.findViewById(R.id.photo);
-		btn_cancel = (Button) this.findViewById(R.id.cancel);
-		okButton = (Button) this.findViewById(R.id.ok_button);
+		listView = (ListView) this.findViewById(R.id.renren_album_list_view);
+		gridView = (GridView) this.findViewById(R.id.renren_album_grid_view);
+		selectedImageLayout = (LinearLayout) findViewById(R.id.renren_album_selected_image_layout);
+		scroll_view = (HorizontalScrollView) findViewById(R.id.renren_album_scrollview);
+		title = (TextView) this.findViewById(R.id.renren_album_title);
+		btn_album = (Button) this.findViewById(R.id.renren_album_photo);
+		btn_cancel = (Button) this.findViewById(R.id.renren_album_cancel);
+		okButton = (Button) this.findViewById(R.id.renren_album_ok_button);
 	}
 
 	private void setListeners() {
@@ -105,17 +105,17 @@ public class MyAlbumActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.photo:
+			case R.id.renren_album_photo:
 				listView.setVisibility(View.VISIBLE);
 				gridView.setVisibility(View.INVISIBLE);
 				btn_album.setVisibility(View.INVISIBLE);
 				title.setText("相册");
 				break;
-			case R.id.cancel:
+			case R.id.renren_album_cancel:
 				setResult(RESULT_CANCELED);
 				finish();
 				break;
-			case R.id.ok_button:
+			case R.id.renren_album_ok_button:
 
 				intent.putStringArrayListExtra(Util.SELECT_PIC, mSelectedPhotos);
 				setResult(RESULT_OK, intent);

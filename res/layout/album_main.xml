@@ -24,7 +24,7 @@
         android:maxLines="4" />
 
     <LinearLayout
-        android:id="@+id/bottom"
+        android:id="@+id/renren_album_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -73,10 +73,10 @@
         android:text="取消" />
 
     <RelativeLayout
-        android:id="@+id/body"
+        android:id="@+id/renren_album_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottom"
+        android:layout_above="@id/renren_album_bottom"
         android:layout_below="@id/send_say" >
 
         <GridView
